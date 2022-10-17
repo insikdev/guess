@@ -1,3 +1,20 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+  main {
+    @apply max-w-xl w-full mx-auto flex flex-col items-center;
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
+  section {
+    @apply flex w-full flex-col items-center py-10;
+  }
+}
+
+@layer utilities {
+  .center {
+    @apply flex justify-center items-center;
+  }
+}
