@@ -20,7 +20,7 @@ export function App() {
   const answerRef = useRef<HTMLInputElement | null>(null);
   const [index, setIndex] = useState(0);
   const [status, setStatus] = useState<'before' | 'ing' | 'fail' | 'win'>(
-    'before'
+    'win'
   );
 
   function handleSubmit(e: React.FormEvent) {
@@ -79,9 +79,9 @@ export function App() {
               </li>
             </ul>
           </section>
-          <section className="center w-full ">
+          <section className="center w-full">
             <button
-              className="w-60 rounded-2xl bg-primary py-5 text-[1.5rem] font-medium leading-none text-secondary"
+              className="text-[1.5rem] font-medium leading-none"
               onClick={gameStart}
             >
               게임 시작
@@ -115,10 +115,7 @@ export function App() {
             </strong>
             의 이름은..?
           </div>
-          <button
-            onClick={gameStart}
-            className="w-60 rounded-2xl bg-primary py-5 text-secondary"
-          >
+          <button onClick={gameStart}>
             <div>{index} 문제 정답!</div>
             <div className="text-[2rem]">재도전</div>
           </button>

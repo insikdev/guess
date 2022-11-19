@@ -4,17 +4,21 @@
 
 @layer base {
   main {
-    @apply max-w-xl w-full mx-auto flex flex-col items-center;
+    @apply mx-auto flex w-full max-w-xl flex-col items-center;
     height: calc(var(--vh, 1vh) * 100);
   }
 
   section {
     @apply flex w-full flex-col items-center py-10;
   }
+
+  button {
+    @apply w-60 rounded-2xl bg-primary py-5 text-secondary;
+  }
 }
 
 @layer utilities {
   .center {
-    @apply flex justify-center items-center;
+    @apply flex items-center justify-center;
   }
 }
