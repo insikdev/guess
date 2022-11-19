@@ -7,7 +7,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 
-import json from 'shared/data/list.json';
+// import json from 'shared/data/list.json';
 
 const KEY = '2GMsz5quEU3Q1oFRgmY5';
 
@@ -18,14 +18,14 @@ class FbService {
     this.docRef = doc(db, 'members', KEY);
   }
 
-  async createDocument() {
-    const result: { [key: string]: {} } = {};
-    json.forEach(({ en, ko }) => {
-      result[en] = { ko, total: 0, correct: 0 };
-    });
+  // async createDocument() {
+  //   const result: { [key: string]: {} } = {};
+  //   json.forEach(({ en, ko }) => {
+  //     result[en] = { ko, total: 0, correct: 0 };
+  //   });
 
-    await setDoc(this.docRef, result);
-  }
+  //   await setDoc(this.docRef, result);
+  // }
 
   async getData() {
     const doc = await getDoc(this.docRef);
