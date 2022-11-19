@@ -94,7 +94,7 @@ export function App() {
           <Timer key={index + 'timer'} callback={gameFail} />
           <Quiz index={index} key={index + 'quiz'} members={members} />
           <section>
-            <form onSubmit={handleSubmit} className="mx-auto w-4/5">
+            <form onSubmit={handleSubmit} className="mx-auto flex gap-4 px-4">
               <input
                 inputMode="search"
                 ref={answerRef}
@@ -103,6 +103,13 @@ export function App() {
                 className="w-full rounded-md border p-4 text-center text-xl leading-none outline-none"
                 autoFocus
               />
+              <button
+                type="submit"
+                className="w-20 bg-primary"
+                onClick={handleSubmit}
+              >
+                제출
+              </button>
             </form>
           </section>
         </main>

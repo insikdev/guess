@@ -13,7 +13,7 @@
   }
 
   button {
-    @apply w-60 rounded-2xl bg-primary py-5 text-secondary;
+    @apply w-60 rounded-md bg-primary py-5 text-secondary;
   }
 }
 
