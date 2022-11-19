@@ -20,7 +20,7 @@ export function App() {
   const answerRef = useRef<HTMLInputElement | null>(null);
   const [index, setIndex] = useState(0);
   const [status, setStatus] = useState<'before' | 'ing' | 'fail' | 'win'>(
-    'win'
+    'before'
   );
 
   function handleSubmit(e: React.FormEvent) {
@@ -122,7 +122,15 @@ export function App() {
         </main>
       ) : null}
       {status === 'win' ? (
-        <main className="center text-[3rem]">축하합니다</main>
+        <main className="mt-[30vh] text-primary">
+          <div className="text-[3rem] leading-none">축하합니다</div>
+          <div
+            className="mt-10 cursor-pointer"
+            onClick={() => setStatus('before')}
+          >
+            홈으로
+          </div>
+        </main>
       ) : null}
     </>
   );
