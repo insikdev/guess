@@ -65,6 +65,10 @@ export function App() {
     logEvent(getAnalytics(), 'game_win');
   }
 
+  useEffect(() => {
+    answerRef.current?.focus();
+  }, [index]);
+
   return (
     <>
       {status === 'before' ? (
