@@ -1,17 +1,17 @@
 type Props = {
-  index: number;
+  order: number;
   members: Member[];
 };
 
-export function Quiz({ index, members }: Props) {
-  const current = members[index];
+export function Quiz({ order, members }: Props) {
+  const current = members[order];
   const correctRate = (current.correct / current.total) * 100;
 
   return (
     <section className="gap-4 bg-primary text-secondary">
       <div>
         <div>
-          {index + 1} / {members.length}
+          {order + 1} / {members.length}
         </div>
         {isNaN(correctRate) ? null : (
           <div>정답률: {Math.floor(correctRate) + '%'}</div>

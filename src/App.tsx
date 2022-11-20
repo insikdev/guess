@@ -1,77 +1,33 @@
+import React, { useEffect, useRef } from 'react';
+
 import { Quiz, Timer } from 'core/components';
-import { useViewportHeight } from 'core/hooks';
-import React, { useEffect, useRef, useState } from 'react';
+import { useManager, useViewportHeight } from 'core/hooks';
 
-import { shuffle } from 'shared/utils';
-import { getAnalytics, logEvent } from 'firebase/analytics';
-
-import { Fb } from 'core/services';
 export function App() {
-  const [members, setMembers] = useState<Member[]>([]);
   useViewportHeight();
-
-  useEffect(() => {
-    (async function () {
-      const initialData = await Fb.getArrayData();
-      setMembers(initialData);
-    })();
-  }, []);
-
   const answerRef = useRef<HTMLInputElement | null>(null);
-  const [index, setIndex] = useState(0);
-  const [status, setStatus] = useState<'before' | 'ing' | 'fail' | 'win'>(
-    'before'
-  );
+  const { data, phase } = useManager();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (answerRef.current?.value === '') return;
 
-    if (answerRef.current?.value === members[index].ko) {
+    if (answerRef.current?.value.trim() === data.members[data.order].ko) {
       answerRef.current.value = '';
-      setIndex((p) => {
-        if (p === members.length - 1) {
-          gameWin();
-          return p;
-        }
-        return p + 1;
-      });
+      phase.next();
     } else {
-      gameFail();
+      phase.fail();
     }
-  }
-
-  function gameStart() {
-    shuffle(members);
-    setIndex(0);
-    setStatus('ing');
-    logEvent(getAnalytics(), 'game_start');
-  }
-
-  async function gameFail() {
-    setStatus('fail');
-    const quiz = [...members].slice(0, index + 1);
-
-    if (quiz.length !== 0) {
-      await Fb.updateDocWhenFail(quiz);
-    }
-    logEvent(getAnalytics(), 'game_fail');
-  }
-
-  async function gameWin() {
-    setStatus('win');
-    await Fb.udpateDocWhenWin(members);
-    logEvent(getAnalytics(), 'game_win');
   }
 
   useEffect(() => {
     answerRef.current?.focus();
-  }, [index]);
+  }, [data.order]);
 
   return (
     <>
-      {status === 'before' ? (
+      {data.status === 'before' ? (
         <main>
           <section className="mt-[5vh] text-primary">
             <div className="mb-5 text-2xl font-semibold">게임 방법</div>
@@ -86,17 +42,21 @@ export function App() {
           <section className="center w-full">
             <button
               className="text-[1.5rem] font-medium leading-none"
-              onClick={gameStart}
+              onClick={phase.start}
             >
               게임 시작
             </button>
           </section>
         </main>
       ) : null}
-      {status === 'ing' ? (
+      {data.status === 'ing' && data.members.length !== 0 ? (
         <main>
-          <Timer key={index + 'timer'} callback={gameFail} />
-          <Quiz index={index} key={index + 'quiz'} members={members} />
+          <Timer key={data.order + 'timer'} callback={phase.fail} />
+          <Quiz
+            order={data.order}
+            key={data.order + 'quiz'}
+            members={data.members}
+          />
           <section>
             <form onSubmit={handleSubmit} className="mx-auto flex gap-4 px-4">
               <input
@@ -118,27 +78,24 @@ export function App() {
           </section>
         </main>
       ) : null}
-      {status === 'fail' ? (
+      {data.status === 'fail' ? (
         <main className="mt-[30vh]">
           <div className="mb-10">
             <strong className="font-bold text-primary">
-              {members[index].en}
+              {data.members[data.order].en}
             </strong>
             의 이름은..?
           </div>
-          <button onClick={gameStart}>
-            <div>{index} 문제 정답!</div>
+          <button onClick={phase.start}>
+            <div>{data.order} 문제 정답!</div>
             <div className="text-[2rem]">재도전</div>
           </button>
         </main>
       ) : null}
-      {status === 'win' ? (
+      {data.status === 'win' ? (
         <main className="mt-[30vh] text-primary">
           <div className="text-[3rem] leading-none">축하합니다</div>
-          <div
-            className="mt-10 cursor-pointer"
-            onClick={() => setStatus('before')}
-          >
+          <div className="mt-10 cursor-pointer" onClick={phase.goHome}>
             홈으로
           </div>
         </main>
